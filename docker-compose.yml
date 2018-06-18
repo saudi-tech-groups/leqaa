@@ -1,0 +1,105 @@
+version: '3'
+
+services:
+  composer:
+    image: composer:1
+    command:
+      - composer
+      - install
+      - --prefer-dist
+      - --no-ansi
+      - --no-interaction
+      - --no-progress
+      - --no-scripts
+    volumes:
+      - ./:/app/
+      - ~/.composer:/tmp
+
+  nginx:
+    build:
+      dockerfile: ./docker/nginx/Dockerfile
+      context: .
+    ports:
+      - "1443:443"
+    volumes:
+      - ./public:/var/www/html/public
+    links:
+      - php-fpm
+    labels:
+      - "traefik.port=443"
+      - "traefik.protocol=https"
+      - "traefik.frontend.entryPoints=https"
+
+  php-fpm:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www/html
+    links:
+      - postgres
+      - redis
+      - mailhog
+    env_file:
+      - docker/php_env_file
+    labels:
+      - traefik.enable=false
+
+  artisan:
+    build:
+      context: .
+    entrypoint: php artisan
+    command:
+      - queue:listen
+    volumes:
+      - .:/var/www/html
+    links:
+      - postgres
+      - redis
+      - mailhog
+    env_file:
+      - docker/php_env_file
+    labels:
+      - traefik.enable=false
+
+  postgres:
+    image: postgres:10
+    ports:
+      - "5432"
+    environment:
+      - POSTGRES_USER=leqaa
+      - POSTGRES_DB=leqaa
+      - POSTGRES_PASSWORD=leqaa-password
+    labels:
+      - traefik.enable=false
+
+  redis:
+    image: redis:4
+    labels:
+      - traefik.enable=false
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+    labels:
+      - "traefik.port=8025"
+      - "traefik.frontend.entryPoints=http"
+
+#  traefik:
+#    image: traefik:1.6
+#    command:
+#      - -c
+#      - /dev/null
+#      - --logLevel=DEBUG
+#      - --api
+#      - --api.entrypoint=http
+#      - --docker
+#      - --docker.domain=localhost
+#      - "--entryPoints=Name:http Address::80"
+#      - "--entryPoints=Name:https Address::443 TLS"
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
