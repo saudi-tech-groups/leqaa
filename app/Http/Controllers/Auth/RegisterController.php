@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Mail\VerifyMail;
 use App\User;
 use App\Http\Controllers\Controller;
+use App\VerifyUser;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -37,7 +40,8 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware('guest')
+            ->except('verify');
     }
 
     /**
@@ -63,10 +67,33 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+
+        $user->verifyUser()->create([
+            'token' => str_random(40)
+        ]);
+
+        Mail::to($user->email)->send(new VerifyMail($user));
+
+    ;
+      return $user;
+    }
+
+
+    public function verify($token)
+    {
+        $user = verifyUser::where('token', $token)->firstOrFail();
+
+        $user->user()->update([
+          'verified' => true,
+        ]);
+
+        $user->delete();
+
+        return redirect(route('home'))->with('success', 'Your account verified now thanks you .');
     }
 }
