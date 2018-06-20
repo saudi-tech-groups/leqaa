@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Mail\VerifyMail;
 use App\User;
-use App\Http\Controllers\Controller;
 use App\VerificationToken;
+use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller
 {
@@ -76,14 +76,13 @@ class RegisterController extends Controller
         ]);
 
         $user->VerificationToken()->create([
-            'token' => str_random(40)
+            'token' => str_random(40),
         ]);
 
         Mail::to($user->email)->send(new VerifyMail($user));
 
-      return $user;
+        return $user;
     }
-
 
     public function verify($token)
     {

@@ -11,15 +11,13 @@ class VerificationToken extends Model
 
     protected $table = 'user_verification_tokens';
 
-
     protected $fillable = [
         'user_id',
-        'token'
+        'token',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
 }
