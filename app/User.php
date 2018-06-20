@@ -3,8 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -14,7 +14,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'verified'
+        'verified',
     ];
 
     protected $hidden = [
@@ -29,6 +29,6 @@ class User extends Authenticatable
 
     public function verifyUser()
     {
-        return $this->hasOne(VerifyUser::class , 'user_id');
+        return $this->hasOne(VerifyUser::class, 'user_id');
     }
 }
