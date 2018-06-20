@@ -18,7 +18,7 @@ class GroupMembership extends Model
     {
         $membership = new static();
 
-        $membership->type = GroupMembership::OWNER;
+        $membership->type = self::OWNER;
         $membership->group()->associate($group);
         $membership->user()->associate($user);
 

@@ -79,6 +79,5 @@ class LoginController extends Controller
         $user->getName();
         $user->getEmail();
         $user->getAvatar();
-
     }
 }
