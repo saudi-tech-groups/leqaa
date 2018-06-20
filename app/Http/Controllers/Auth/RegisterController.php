@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Mail\VerifyMail;
+use App\Mail\UserVerificationMail;
 use App\User;
 use App\VerificationToken;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -79,7 +79,7 @@ class RegisterController extends Controller
             'token' => str_random(40),
         ]);
 
-        Mail::to($user->email)->send(new VerifyMail($user));
+        Mail::to($user->email)->send(new UserVerificationMail($user));
 
         return $user;
     }
