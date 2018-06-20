@@ -16,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Horizon::auth(function ($request) {
             return app()->environment('local')
-                || Auth::user()->id == 1;
+                || auth()->user()->id == 1;
         });
     }
 
