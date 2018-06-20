@@ -5,11 +5,11 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class VerifyUser extends Model
+class VerificationToken extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'verify_users';
+    protected $table = 'user_verification_tokens';
 
 
     protected $fillable = [

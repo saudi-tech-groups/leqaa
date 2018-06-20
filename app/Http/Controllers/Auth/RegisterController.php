@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Mail\VerifyMail;
 use App\User;
 use App\Http\Controllers\Controller;
-use App\VerifyUser;
+use App\VerificationToken;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -73,20 +73,19 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
 
-        $user->verifyUser()->create([
+        $user->VerificationToken()->create([
             'token' => str_random(40)
         ]);
 
         Mail::to($user->email)->send(new VerifyMail($user));
 
-    ;
       return $user;
     }
 
 
     public function verify($token)
     {
-        $user = verifyUser::where('token', $token)->firstOrFail();
+        $user = VerificationToken::where('token', $token)->firstOrFail();
 
         $user->user()->update([
           'verified' => true,

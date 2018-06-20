@@ -27,8 +27,8 @@ class User extends Authenticatable
         return $this->belongsToMany(Group::class);
     }
 
-    public function verifyUser()
+    public function VerificationToken()
     {
-        return $this->hasOne(VerifyUser::class , 'user_id');
+        return $this->hasOne(VerificationToken::class , 'user_id');
     }
 }
