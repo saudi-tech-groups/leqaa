@@ -1,0 +1,17 @@
+language: php
+
+php:
+  - 7.1
+
+services:
+  - postgresql
+
+env:
+  - APP_ENV=testing
+
+before_script:
+  - composer self-update
+  - composer install --no-interaction
+
+script:
+  - vendor/bin/phpunit

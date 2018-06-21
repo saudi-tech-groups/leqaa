@@ -7,11 +7,13 @@
             {!! session()->get('success') !!}
         </div>
     @endif
+
     @if(auth()->user()->verified != true)
         <div class="alert alert-warning">
-            Please check your email to activate your account .
+            Please check your email to activate your account.
         </div>
     @endif
+
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
