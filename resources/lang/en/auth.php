@@ -16,4 +16,13 @@ return [
     'failed'   => 'These credentials do not match our records.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 
+    'phrases' => [
+        'user_welcome' => 'Welcome to Leqaa, :name!',
+        'verify_email' => 'Please click on the below link to verify your email account.',
+    ],
+
+    'actions' => [
+        'verify_email' => 'Verify Email',
+    ],
+
 ];
