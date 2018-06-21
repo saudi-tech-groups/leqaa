@@ -15,9 +15,9 @@ class RegistrationTest extends TestCase
         $password = str_random(8);
 
         $res = $this->post('register', [
-            'name' => 'User Name',
-            'email' => 'user@leqaa.org',
-            'password' => $password,
+            'name'                  => 'User Name',
+            'email'                 => 'user@leqaa.org',
+            'password'              => $password,
             'password_confirmation' => $password,
         ]);
 
