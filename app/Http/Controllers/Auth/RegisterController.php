@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Mail\UserVerificationMail;
+use App\Notifications\Auth\EmailVerificationRequested;
 use App\User;
 use App\VerificationToken;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -54,8 +53,8 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|string|email|max:255|unique:users',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
     }
@@ -69,31 +68,35 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $user = User::create([
-            'name'     => $data['name'],
-            'email'    => $data['email'],
+        /** @var \App\User $user */
+        $user = User::query()->create([
+            'name' => $data['name'],
+            'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
 
-        $user->verificationToken()->create([
-            'token' => str_random(40),
-        ]);
+        $token = VerificationToken::generate($user);
 
-        Mail::to($user->email)->send(new UserVerificationMail($user));
+        $user->notify(new EmailVerificationRequested($user, $token));
 
         return $user;
     }
 
-    public function verify($token)
+    public function verify($userId, $token)
     {
-        $user = VerificationToken::where('token', $token)->firstOrFail();
+        $user = User::query()->findOrFail($userId);
 
-        $user->user()->update([
-          'verified' => true,
+        $token = VerificationToken::query()->where('token', $token)
+            ->where('user_id', $userId)
+            ->firstOrFail();
+
+        $user->update([
+            'verified' => true,
         ]);
 
-        $user->delete();
+        $token->delete();
 
-        return redirect(route('home'))->with('success', 'Your account verified now thanks you .');
+        return redirect(route('home'))
+            ->with('success', 'Your account is verified now.');
     }
 }
