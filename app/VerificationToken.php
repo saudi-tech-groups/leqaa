@@ -26,7 +26,7 @@ class VerificationToken extends Model
     {
         return static::query()->create([
             'user_id' => $user->id,
-            'token' => Str::random(40),
+            'token'   => Str::random(40),
         ]);
     }
 
