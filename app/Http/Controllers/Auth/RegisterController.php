@@ -79,7 +79,7 @@ class RegisterController extends Controller
             'token' => str_random(40),
         ]);
 
-        Mail::to($user->email)->send(new UserVerificationMail($user));
+        $user->notify(new UserVerificationMail($user));
 
         return $user;
     }
@@ -92,8 +92,9 @@ class RegisterController extends Controller
           'verified' => true,
         ]);
 
-        $user->delete();
+        $token->delete();
 
-        return redirect(route('home'))->with('success', 'Your account verified now thanks you .');
+        return redirect(route('home'))
+            ->with('success', 'Your account is verified now.');
     }
 }
