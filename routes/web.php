@@ -11,15 +11,18 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', 'HomeController@index')
+    ->name('home');
+
+Route::get('auth', function () {
+    Auth::routes();
+
+    Route::get('auth/login/github', 'Auth\LoginController@redirectToGithub');
+    Route::get('auth/login/github/callback', 'Auth\LoginController@handleGithubCallback');
+
+    Route::get('verify/{token}', 'Auth\RegisterController@verify')
+        ->name('verify');
 });
-
-Route::get('login/github', 'Auth\LoginController@redirectToGithub');
-Route::get('login/github/callback', 'Auth\LoginController@handleGithubCallback');
-
-Route::get('user/verify/{token}', 'Auth\RegisterController@verify')->name('verify');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
