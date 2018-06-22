@@ -45,6 +45,16 @@ class GroupsController extends Controller
         GroupMembership::associateOrganizer($group, Auth::user());
     }
 
+    public function join(Request $request, Group $group)
+    {
+        Gate::authorize('join', $group);
+
+        GroupMembership::associateMember($group, Auth::user());
+
+        return redirect()->route('groups.show', [$group])
+            ->with('success',  'You joined the group');
+    }
+
     public function remove(Request $request, Group $group)
     {
         Gate::authorize('delete', $group);

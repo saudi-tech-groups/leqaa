@@ -36,6 +36,19 @@ class GroupPolicy
     }
 
     /**
+     * Determine whether the user can join the group.
+     *
+     * @param \App\User  $user
+     * @param \App\Group $group
+     *
+     * @return mixed
+     */
+    public function join(User $user, Group $group)
+    {
+        return $user->isVerified();
+    }
+
+    /**
      * Determine whether the user can update the group.
      *
      * @param \App\User  $user
