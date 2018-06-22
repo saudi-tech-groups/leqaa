@@ -57,7 +57,7 @@ return [
 
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'mailer@leqaa.org'),
-        'name'    => env('MAIL_FROM_NAME', 'لقاء - Leqaa'),
+        'name' => env('MAIL_FROM_NAME', 'لقاء - Leqaa'),
     ],
 
     /*
