@@ -42,9 +42,17 @@ class GroupsController extends Controller
 
         $group->save();
 
-        $group->organizers()->attach(Auth::user()->id);
+        GroupMembership::associateOrganizer($group, Auth::user());
+    }
 
-        GroupMembership::newOwner($group, Auth::user());
+    public function join(Request $request, Group $group)
+    {
+        Gate::authorize('join', $group);
+
+        GroupMembership::associateMember($group, Auth::user());
+
+        return redirect()->route('groups.show', [$group])
+            ->with('success',  'You joined the group');
     }
 
     public function remove(Request $request, Group $group)
