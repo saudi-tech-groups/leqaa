@@ -15,9 +15,9 @@ class RegistrationTest extends TestCase
 
         $response = $this->followingRedirects()
             ->post('auth/register', [
-                'name' => 'User Name',
-                'email' => 'user@leqaa.org',
-                'password' => $password,
+                'name'                  => 'User Name',
+                'email'                 => 'user@leqaa.org',
+                'password'              => $password,
                 'password_confirmation' => $password,
             ]);
 
