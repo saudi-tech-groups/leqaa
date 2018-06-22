@@ -80,8 +80,8 @@ return [
         'string'  => 'يجب أن لا يتجاوز طول النّص :attribute :max حروفٍ/حرفًا',
         'array'   => 'يجب أن لا يحتوي :attribute على أكثر من :max عناصر/عنصر.',
     ],
-    'mimes'       => ':attributes يجب أن يكون ملفًا من نوع :values.',
-    'mimetypes'   => ':attributes يجب أن يكون ملفًا من نوع :values.',
+    'mimes'                => ':attributes يجب أن يكون ملفًا من نوع :values.',
+    'mimetypes'            => ':attributes يجب أن يكون ملفًا من نوع :values.',
     'min'                  => [
         'numeric' => 'يجب أن تكون قيمة :attribute مساوية لـ :min أو أكبر.',
         'file'    => 'يجب أن يكون حجم الملف :attribute على الأقل :min كيلوبايت',
