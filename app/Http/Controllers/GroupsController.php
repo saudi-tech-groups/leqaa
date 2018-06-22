@@ -42,9 +42,7 @@ class GroupsController extends Controller
 
         $group->save();
 
-        $group->organizers()->attach(Auth::user()->id);
-
-        GroupMembership::newOwner($group, Auth::user());
+        GroupMembership::associateOrganizer($group, Auth::user());
     }
 
     public function remove(Request $request, Group $group)
