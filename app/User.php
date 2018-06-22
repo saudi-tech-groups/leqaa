@@ -22,6 +22,10 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected $casts = [
+        'verified' => 'bool',
+    ];
+
     public function groups()
     {
         return $this->belongsToMany(Group::class);
@@ -29,6 +33,14 @@ class User extends Authenticatable
 
     public function verificationToken()
     {
-        return $this->hasOne(VerificationToken::class, 'user_id');
+        return $this->hasOne(UserVerificationToken::class, 'user_id');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVerified()
+    {
+        return $this->verified;
     }
 }

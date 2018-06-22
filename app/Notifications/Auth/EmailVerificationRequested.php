@@ -3,7 +3,7 @@
 namespace App\Notifications\Auth;
 
 use App\User;
-use App\VerificationToken;
+use App\UserVerificationToken;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -19,17 +19,17 @@ class EmailVerificationRequested extends Notification implements ShouldQueue
     private $user;
 
     /**
-     * @var \App\VerificationToken
+     * @var \App\UserVerificationToken
      */
     private $token;
 
     /**
      * EmailVerificationRequested constructor.
      *
-     * @param \App\User              $user
-     * @param \App\VerificationToken $token
+     * @param \App\User                  $user
+     * @param \App\UserVerificationToken $token
      */
-    public function __construct(User $user, VerificationToken $token)
+    public function __construct(User $user, UserVerificationToken $token)
     {
         $this->user = $user;
         $this->token = $token;
@@ -56,7 +56,7 @@ class EmailVerificationRequested extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        $url = route('verify', [$this->user->id, $this->token->token]);
+        $url = route('email_verify', [base64_encode($this->user->email), $this->token->token]);
 
         return (new MailMessage())
             ->subject(__('Email verification'))

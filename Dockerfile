@@ -1,4 +1,4 @@
-FROM php:7.1-fpm
+FROM php:7.2-fpm
 
 RUN apt-get update -qq \
     && apt-get install -y -qq --no-install-recommends \

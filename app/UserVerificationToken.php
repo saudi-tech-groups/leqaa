@@ -6,11 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
-class VerificationToken extends Model
+class UserVerificationToken extends Model
 {
     use SoftDeletes;
-
-    protected $table = 'user_verification_tokens';
 
     protected $fillable = [
         'user_id',
@@ -20,7 +18,7 @@ class VerificationToken extends Model
     /**
      * @param \App\User $user
      *
-     * @return \App\VerificationToken
+     * @return \App\UserVerificationToken
      */
     public static function generate(User $user)
     {

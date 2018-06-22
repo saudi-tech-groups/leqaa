@@ -24,5 +24,5 @@ Route::group(['prefix' => 'auth'], function () {
     Route::get('login/github/callback', 'Auth\LoginController@handleGithubCallback');
 
     Route::get('verify/{user_id}/{token}', 'Auth\RegisterController@verify')
-        ->name('verify');
+        ->name('email_verify');
 });

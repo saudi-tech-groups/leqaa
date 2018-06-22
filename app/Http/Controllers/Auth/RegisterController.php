@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Notifications\Auth\EmailVerificationRequested;
 use App\User;
-use App\VerificationToken;
+use App\UserVerificationToken;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -75,25 +75,23 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
 
-        $token = VerificationToken::generate($user);
+        $token = UserVerificationToken::generate($user);
 
         $user->notify(new EmailVerificationRequested($user, $token));
 
         return $user;
     }
 
-    public function verify($userId, $token)
+    public function verify($userEmail, $token)
     {
-        $user = User::query()->findOrFail($userId);
+        $user = User::query()->where('email', base64_decode($userEmail))->firstOrFail();
+        $token = $user->verificationToken;
 
-        $token = VerificationToken::query()->where('token', $token)
-            ->where('user_id', $userId)
-            ->firstOrFail();
+        if (is_null($token)) {
+            abort(404);
+        }
 
-        $user->update([
-            'verified' => true,
-        ]);
-
+        $user->update(['verified' => true]);
         $token->delete();
 
         return redirect(route('home'))

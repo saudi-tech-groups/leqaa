@@ -8,7 +8,7 @@
         </div>
     @endif
 
-    @if(auth()->user()->verified != true)
+    @unless(auth()->user()->isVerified())
         <div class="alert alert-warning">
             Please check your email to activate your account.
         </div>

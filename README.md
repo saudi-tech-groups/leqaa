@@ -25,7 +25,7 @@ $ docker-compose up
 To run the test locally, run:
 
 ```shell
-$ ./scripts/run-tests.sh
+$ ./scripts/test.sh
 ```
 
 This requires `docker-compose` to be installed.
