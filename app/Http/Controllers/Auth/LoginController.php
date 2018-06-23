@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Leqaa\UserManager;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Laravel\Socialite\Facades\Socialite;
@@ -36,7 +38,7 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')
-            ->except('logout');
+            ->except('logout','redirectToProvider','handleProviderCallback');
     }
 
     /**
@@ -44,11 +46,17 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function redirectToGithub()
+    public function redirectToProvider(Request $request, $provider)
     {
-        return Socialite::driver('github')
-            ->scopes(['read:user'])
-            ->redirect();
+        if(! in_array($provider, UserManager::getProviders()))
+            return redirect()->to($this->redirectTo);
+
+        $driver = Socialite::driver($provider);
+
+        if($provider === 'github')
+            $driver->scopes(['read:user']);
+
+        return $driver->redirect();
     }
 
     /**
@@ -56,28 +64,15 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function handleGithubCallback()
+    public function handleProviderCallback(Request $request, $provider)
     {
-        $user = Socialite::driver('github')->user();
+        if(! in_array($provider, UserManager::getProviders()))
+            return redirect()->to($this->redirectTo);
 
-        // $user->token;
+        $user = Socialite::driver($provider)->user();
 
-        $user = Socialite::driver('github')->user();
+        UserManager::loginSocialUser($user, $provider);
 
-        // OAuth Two Providers
-        $token = $user->token;
-        $refreshToken = $user->refreshToken; // not always provided
-        $expiresIn = $user->expiresIn;
-
-        // OAuth One Providers
-        $token = $user->token;
-        $tokenSecret = $user->tokenSecret;
-
-        // All Providers
-        $user->getId();
-        $user->getNickname();
-        $user->getName();
-        $user->getEmail();
-        $user->getAvatar();
+        return redirect()->to($this->redirectTo);
     }
 }
