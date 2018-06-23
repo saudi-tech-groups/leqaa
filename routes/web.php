@@ -20,8 +20,10 @@ Route::get('/', 'HomeController@index')
 Route::group(['prefix' => 'auth'], function () {
     Auth::routes();
 
-    Route::get('login/github', 'Auth\LoginController@redirectToGithub');
-    Route::get('login/github/callback', 'Auth\LoginController@handleGithubCallback');
+    Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider')
+        ->name('socialAuth.redirect');
+    Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')
+        ->name('socialAuth.callback');
 
     Route::get('verify/{user_id}/{token}', 'Auth\RegisterController@verify')
         ->name('email_verify');
