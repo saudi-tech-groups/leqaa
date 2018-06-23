@@ -59,6 +59,22 @@
                                 </a>
                             </div>
                         </div>
+
+                        <div class="form-group row mb-0">
+                            <div class="col-md-8 offset-md-4">
+                                <hr>
+                                <div class="w-100 text-center">Or</div>
+                                <a class="d-block btn btn-link" href="{{ route('socialAuth.redirect', ['provider' => 'google']) }}">
+                                    {{ __('Login with Google') }}
+                                </a>
+                                <a class="d-block btn btn-link" href="{{ route('socialAuth.redirect', ['provider' => 'github']) }}">
+                                    {{ __('Login with GitHub') }}
+                                </a>
+                                <a class="d-block btn btn-link" href="{{ route('socialAuth.redirect', ['provider' => 'twitter']) }}">
+                                    {{ __('Login with Twitter') }}
+                                </a>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>

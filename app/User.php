@@ -15,6 +15,7 @@ class User extends Authenticatable
         'email',
         'password',
         'verified',
+        'need_password_update',
     ];
 
     protected $hidden = [
@@ -24,6 +25,10 @@ class User extends Authenticatable
 
     protected $casts = [
         'verified' => 'bool',
+        'need_password_update' => 'bool',
+        'google_updated_at' => 'datetime',
+        'github_updated_at' => 'datetime',
+        'twitter_updated_at' => 'datetime',
     ];
 
     public function groups()
